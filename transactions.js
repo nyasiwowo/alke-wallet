@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+  // Inicializar transacciones al cargar la página
+  initializeSaldoTransactions();
+
   const listaTransacciones = JSON.parse(localStorage.getItem('transactions')) || [];
 
 

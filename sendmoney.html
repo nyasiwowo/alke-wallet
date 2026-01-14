@@ -33,7 +33,10 @@
       </button>
 
 
-      <input id="searchInput" class="form-control mb-3" placeholder="Buscar por nombre o alias">
+      <div class="position-relative mb-3">
+        <input id="searchInput" class="form-control" placeholder="Buscar por nombre o alias" autocomplete="off">
+        <ul id="autocompleteSuggestions" class="list-group position-absolute w-100" style="top: 100%; left: 0; z-index: 1000; display: none; max-height: 200px; overflow-y: auto;"></ul>
+      </div>
 
       <div id="message"></div>
 
@@ -77,6 +80,8 @@
   <div class="overlay-content">
     <h5 class="solid-dark">Monto a enviar</h5>
 
+    <div id="amountMessage"></div>
+
     <input id="amountInput" type="number" class="form-control mb-3" placeholder="$0">
 
     <div class="d-flex justify-content-between">
@@ -90,6 +95,7 @@
     <div id="bottomAlertContainer" class="bottom-alert-container"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="deposit.js"></script>
 <script src="sendmoney.js"></script>
 </body>
 </html>

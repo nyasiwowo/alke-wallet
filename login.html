@@ -19,7 +19,7 @@
         <i class="bi bi-wallet2 mr-2" aria-hidden="true"></i>AlkeWallet
       </a>
       <div class="ml-auto">
-        <a href="index.html" class="btn btn-sm btn-outline-light">Registrarse</a>
+        <button id="registerBtn" class="btn btn-sm btn-outline-light">Registrarse</button>
       </div>
     </div>
   </nav>
@@ -54,6 +54,47 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Modal de Registro -->
+  <div id="registerOverlay" class="overlay d-none">
+    <div class="overlay-content">
+      <h5 class="solid-dark mb-4">Registro de Usuario</h5>
+
+      <div id="registerMessage"></div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="solid-dark">Nombre Completo</label>
+          <input type="text" id="fullName" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="solid-dark">Email</label>
+          <input type="email" id="registerEmail" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="solid-dark">Contraseña</label>
+          <input type="password" id="registerPassword" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="solid-dark">CBU</label>
+          <input type="text" id="registerCBU" class="form-control" placeholder="Ej: 0000003100060386521879" required>
+        </div>
+
+        <div class="form-group">
+          <label class="solid-dark">Banco</label>
+          <input type="text" id="registerBank" class="form-control" required>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <button type="button" id="cancelRegister" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrarse</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

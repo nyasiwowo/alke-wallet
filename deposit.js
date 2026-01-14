@@ -1,4 +1,29 @@
+// ====== INICIALIZACIÓN DE SALDO Y TRANSACCIONES ======
+function initializeSaldoTransactions() {
+  // Inicializar saldo
+  if (!localStorage.getItem('saldo')) {
+    localStorage.setItem('saldo', '60000');
+  }
+
+  // Inicializar transacciones
+  if (!localStorage.getItem('transactions')) {
+    const defaultTransactions = [
+      {
+        type: 'deposit',
+        amount: 60000,
+        date: new Date().toISOString(),
+        description: 'Depósito inicial',
+        sign: '+'
+      }
+    ];
+    localStorage.setItem('transactions', JSON.stringify(defaultTransactions));
+  }
+}
+
 $(document).ready(function () {
+
+  // Inicializar saldo y transacciones al cargar la página
+  initializeSaldoTransactions();
 
   let saldo = Number(localStorage.getItem('saldo')) || 60000;
   $('#currentBalance').text(`$${saldo.toLocaleString()}`);

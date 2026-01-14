@@ -1,5 +1,8 @@
 $(document).ready(function () {
- 
+
+  // Inicializar saldo y transacciones al cargar la página
+  initializeSaldoTransactions();
+  
   let saldo = Number(localStorage.getItem('saldo')) || 60000;
   localStorage.setItem('saldo', saldo);
 

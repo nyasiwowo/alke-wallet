@@ -1,4 +1,27 @@
+function initializeContacts() {
+  if (!localStorage.getItem('contacts')) {
+    const defaultContacts = [
+      {
+        name: 'Juan Pérez',
+        alias: 'juanperez',
+        cbu: '0000003100060386521879',
+        bank: 'Banco Nación'
+      },
+      {
+        name: 'María García',
+        alias: 'mariagarcia',
+        cbu: '0000003100060386521880',
+        bank: 'BBVA'
+      }
+    ];
+    localStorage.setItem('contacts', JSON.stringify(defaultContacts));
+  }
+}
+
 $(document).ready(function () {
+
+  // Inicializar contactos al cargar la página
+  initializeContacts();
 
   let selectedIndex = null;
 
@@ -47,8 +70,56 @@ $(document).ready(function () {
 
 
   $('#searchInput').on('input', function () {
-    renderContacts($(this).val().toLowerCase());
+    const filter = $(this).val().toLowerCase();
+    renderContacts(filter);
+    updateAutocompleteSuggestions(filter);
   });
+
+  $('#searchInput').on('blur', function () {
+    setTimeout(() => {
+      $('#autocompleteSuggestions').hide();
+    }, 200);
+  });
+
+  function updateAutocompleteSuggestions(filter = '') {
+    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    const suggestions = $('#autocompleteSuggestions');
+    suggestions.empty();
+
+    if (!filter || filter.length === 0) {
+      suggestions.hide();
+      return;
+    }
+
+    const filtered = contacts.filter(c => {
+      const nameStr = c.name ? String(c.name).toLowerCase() : '';
+      const aliasStr = c.alias ? String(c.alias).toLowerCase() : '';
+      return nameStr.includes(filter) || aliasStr.includes(filter);
+    });
+
+    if (filtered.length === 0) {
+      suggestions.hide();
+      return;
+    }
+
+    filtered.forEach((c) => {
+      const suggestionItem = $(`
+        <li class="list-group-item list-group-item-action" style="cursor: pointer;">
+          <strong>${c.name}</strong> <small class="text-muted">(${c.alias})</small>
+        </li>
+      `);
+
+      suggestionItem.click(() => {
+        $('#searchInput').val(c.name);
+        suggestions.hide();
+        renderContacts(c.name.toLowerCase());
+      });
+
+      suggestions.append(suggestionItem);
+    });
+
+    suggestions.show();
+  }
 
 
   function renderContacts(filter = '') {
@@ -93,20 +164,31 @@ $(document).ready(function () {
   }
 
 
-  $('#sendBtn').click(() => $('#amountOverlay').removeClass('d-none'));
-  $('#cancelAmount').click(() => $('#amountOverlay').addClass('d-none'));
+  $('#sendBtn').click(() => {
+    $('#amountOverlay').removeClass('d-none');
+    $('#amountMessage').html('');
+    $('#amountInput').val('');
+  });
+  $('#cancelAmount').click(() => {
+    $('#amountOverlay').addClass('d-none');
+    $('#amountMessage').html('');
+  });
 
   $('#confirmSend').click(function () {
     const monto = Number($('#amountInput').val());
     let saldo = Number(localStorage.getItem('saldo')) || 0;
 
     if (!monto || monto <= 0) {
-      showMessage('Monto inválido', 'danger');
+      $('#amountMessage').html(`
+        <div class="alert alert-danger text-center">Monto inválido</div>
+      `);
       return;
     }
 
     if (monto > saldo) {
-      showMessage('Saldo insuficiente', 'danger');
+      $('#amountMessage').html(`
+        <div class="alert alert-danger text-center">Saldo insuficiente</div>
+      `);
       return;
     }
 
