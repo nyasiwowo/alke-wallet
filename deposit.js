@@ -1,12 +1,15 @@
-// ====== INICIALIZACIÓN DE SALDO Y TRANSACCIONES ======
-function initializeSaldoTransactions() {
-  // Inicializar saldo
-  if (!localStorage.getItem('saldo')) {
-    localStorage.setItem('saldo', '60000');
+function initializeSaldoTransactions() {         // Inicializa el saldo y las transacciones si no existen
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser) return;
+  
+  const userSaldoKey = `saldo_${currentUser.email}`;
+  const userTransactionsKey = `transactions_${currentUser.email}`;
+  
+  if (!localStorage.getItem(userSaldoKey)) {
+    localStorage.setItem(userSaldoKey, '60000');
   }
 
-  // Inicializar transacciones
-  if (!localStorage.getItem('transactions')) {
+  if (!localStorage.getItem(userTransactionsKey)) {
     const defaultTransactions = [
       {
         type: 'deposit',
@@ -16,16 +19,19 @@ function initializeSaldoTransactions() {
         sign: '+'
       }
     ];
-    localStorage.setItem('transactions', JSON.stringify(defaultTransactions));
+    localStorage.setItem(userTransactionsKey, JSON.stringify(defaultTransactions));
   }
 }
 
-$(document).ready(function () {
+$(document).ready(function () { 
 
-  // Inicializar saldo y transacciones al cargar la página
   initializeSaldoTransactions();
 
-  let saldo = Number(localStorage.getItem('saldo')) || 60000;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const userSaldoKey = `saldo_${currentUser.email}`;
+  const userTransactionsKey = `transactions_${currentUser.email}`;
+
+  let saldo = Number(localStorage.getItem(userSaldoKey));
   $('#currentBalance').text(`$${saldo.toLocaleString()}`);
 
   $('#depositForm').submit(function (e) {
@@ -43,9 +49,9 @@ $(document).ready(function () {
     }
 
     saldo += monto;
-    localStorage.setItem('saldo', saldo);
+    localStorage.setItem(userSaldoKey, saldo);
 
-    const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    const transactions = JSON.parse(localStorage.getItem(userTransactionsKey)) || []; // Recupera las transacciones existentes
     transactions.push({
       type: 'deposit',
       amount: monto,
@@ -53,7 +59,7 @@ $(document).ready(function () {
       description: 'Depósito',
       sign: '+'
     });
-    localStorage.setItem('transactions', JSON.stringify(transactions));
+    localStorage.setItem(userTransactionsKey, JSON.stringify(transactions));
 
     $('#alert-container').html(`
       <div class="alert alert-success text-center">
@@ -62,12 +68,12 @@ $(document).ready(function () {
     `);
 
     $('#deposit-info').html(`
-      Has depositado <strong>$${monto.toLocaleString()}</strong>
+      Has depositado <strong>$${monto.toLocaleString()}</strong> 
     `);
 
-    $('#currentBalance').text(`$${saldo.toLocaleString()}`);
+    $('#currentBalance').text(`$${saldo.toLocaleString()}`);     // Actualiza el saldo mostrado
 
-    setTimeout(function () {
+    setTimeout(function () {     // Redirige al menú después de 2 segundos para que el usuario vea el mensaje
       window.location.href = 'menu.html';
     }, 2000);
   });
