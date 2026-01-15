@@ -1,6 +1,3 @@
-/* Consolidated styles.css - palette, themes, utilities */
-
-/* Palette variables */
 :root{
   --dark-blue: #0A2540;
   --mid-blue:  #1F4E79;
@@ -12,40 +9,32 @@
   --shadow: 0 6px 18px rgba(2,6,23,0.12);
 }
 
-/* Base reset */
 html,body{height:100%;margin:0}
 body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
 
-/* Common components */
 .card{background:var(--white);border:none;border-radius:var(--card-radius);box-shadow:var(--shadow)}
 .btn-primary{background:var(--mid-blue);border-color:var(--mid-blue);color:var(--white)}
 a{color:inherit}
 
-/* Themes: page background + base text color */
 .theme-1{background-color:var(--dark-blue);color:var(--white)}
 .theme-2{background-color:var(--light-gray);color:var(--dark-blue)}
 .theme-3{background-color:var(--mid-blue);color:var(--white)}
 .theme-4{background-color:var(--white);color:var(--mid-blue)}
 .theme-5{background-color:var(--dark-gray);color:var(--white)}
 
-/* Muted text per theme for readability */
 .theme-1 .text-muted, .theme-3 .text-muted, .theme-5 .text-muted { color: rgba(255,255,255,0.85) !important }
 .theme-2 .text-muted, .theme-4 .text-muted { color: rgba(3,7,18,0.55) !important }
 
-/* Utility: muted text override for specific elements that should use dark gray */
 .muted-dark { color: #0B1320 !important }
 
-/* Utility: solid dark headings */
 .solid-dark { color: var(--dark-gray) !important; font-weight: 700; }
 
-/* Overlays & lists */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000}
 .overlay-content{background:var(--white);padding:20px;width:100%;max-width:400px;border-radius:6px}
 .contact-list{max-height:220px;overflow-y:auto}
 .bottom-alert-container{position:fixed;left:0;right:0;bottom:18%;display:flex;justify-content:center;z-index:1100;pointer-events:none}
 .bottom-alert-container .alert{pointer-events:auto;min-width:320px;font-size:1.05rem;padding:0.75rem 1.25rem;border-radius:0.5rem;box-shadow:0 6px 18px rgba(0,0,0,0.12)}
 
-/* Buttons "Volver al menú" styling per theme */
 .theme-1 .btn-outline-secondary, .theme-3 .btn-outline-secondary {
   color:var(--white) !important; border-color:rgba(255,255,255,0.18) !important; background-color:rgba(255,255,255,0.03);
 }
@@ -61,11 +50,9 @@ a{color:inherit}
 }
 .theme-2 .btn-outline-secondary:hover, .theme-4 .btn-outline-secondary:hover { background-color:rgba(55,65,81,0.06); }
 
-/* Transaction list scroll */
 #transactionList{max-height:320px;overflow-y:auto}
 
 @media (max-width:420px){.card.mx-auto{margin:1rem}}
-
-/* Brand font */
+ 
 .brand-font{font-family:'Playfair Display', Georgia, serif; font-weight:700; font-size:1.25rem; letter-spacing:0.2px}
 
