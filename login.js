@@ -1,4 +1,4 @@
-// ====== INICIALIZACIÓN DE USUARIOS ======
+// Crear usuario admin por defecto si no existe ninguno
 function initializeUsers() {
   if (!localStorage.getItem('users')) {
     const defaultUsers = [
@@ -6,7 +6,7 @@ function initializeUsers() {
         fullName: 'Admin Usuario',
         email: 'admin@wallet.cl',
         password: '123456',
-        cbu: '0000003100060386521000',
+        cbu: '69696969696969696969696',
         bank: 'Banco Admin',
         registeredDate: new Date().toISOString()
       }
