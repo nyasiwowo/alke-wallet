@@ -3,7 +3,10 @@ $(document).ready(function () {
   // Inicializar transacciones al cargar la página
   initializeSaldoTransactions();
 
-  const listaTransacciones = JSON.parse(localStorage.getItem('transactions')) || [];
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const userTransactionsKey = `transactions_${currentUser.email}`;
+  
+  const listaTransacciones = JSON.parse(localStorage.getItem(userTransactionsKey)) || [];
 
 
   $('#filterType').change(function () {
