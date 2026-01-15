@@ -3,8 +3,11 @@ $(document).ready(function () {
   // Inicializar saldo y transacciones al cargar la página
   initializeSaldoTransactions();
   
-  let saldo = Number(localStorage.getItem('saldo')) || 60000;
-  localStorage.setItem('saldo', saldo);
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const userSaldoKey = `saldo_${currentUser.email}`;
+  
+  let saldo = Number(localStorage.getItem(userSaldoKey)) || 60000;
+  localStorage.setItem(userSaldoKey, saldo);
 
   $('#saldo').text(`$${saldo.toLocaleString('es-CL')}`);
 

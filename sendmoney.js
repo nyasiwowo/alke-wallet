@@ -1,5 +1,10 @@
 function initializeContacts() {
-  if (!localStorage.getItem('contacts')) {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser) return;
+  
+  const userContactsKey = `contacts_${currentUser.email}`;
+  
+  if (!localStorage.getItem(userContactsKey)) {
     const defaultContacts = [
       {
         name: 'Juan Pérez',
@@ -14,7 +19,7 @@ function initializeContacts() {
         bank: 'BBVA'
       }
     ];
-    localStorage.setItem('contacts', JSON.stringify(defaultContacts));
+    localStorage.setItem(userContactsKey, JSON.stringify(defaultContacts));
   }
 }
 
@@ -22,6 +27,9 @@ $(document).ready(function () {
 
   // Inicializar contactos al cargar la página
   initializeContacts();
+
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const userContactsKey = `contacts_${currentUser.email}`;
 
   let selectedIndex = null;
 
@@ -51,9 +59,9 @@ $(document).ready(function () {
       return;
     }
 
-    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    const contacts = JSON.parse(localStorage.getItem(userContactsKey)) || [];
     contacts.push({ name, cbu, alias, bank });
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem(userContactsKey, JSON.stringify(contacts));
     console.log('handleSaveContact: saved contact', { name, cbu, alias, bank });
     console.log('handleSaveContact: contacts in localStorage', contacts);
 
@@ -82,7 +90,7 @@ $(document).ready(function () {
   });
 
   function updateAutocompleteSuggestions(filter = '') {
-    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    const contacts = JSON.parse(localStorage.getItem(userContactsKey)) || [];
     const suggestions = $('#autocompleteSuggestions');
     suggestions.empty();
 
@@ -123,7 +131,7 @@ $(document).ready(function () {
 
 
   function renderContacts(filter = '') {
-    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    const contacts = JSON.parse(localStorage.getItem(userContactsKey)) || [];
     console.log('renderContacts: called with filter=', filter, 'contacts.length=', contacts.length);
     $('#contactList').empty();
     selectedIndex = null;
@@ -175,8 +183,12 @@ $(document).ready(function () {
   });
 
   $('#confirmSend').click(function () {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userSaldoKey = `saldo_${currentUser.email}`;
+    const userTransactionsKey = `transactions_${currentUser.email}`;
+    
     const monto = Number($('#amountInput').val());
-    let saldo = Number(localStorage.getItem('saldo')) || 0;
+    let saldo = Number(localStorage.getItem(userSaldoKey)) || 0;
 
     if (!monto || monto <= 0) {
       $('#amountMessage').html(`
@@ -193,12 +205,12 @@ $(document).ready(function () {
     }
 
     saldo -= monto;
-    localStorage.setItem('saldo', saldo);
+    localStorage.setItem(userSaldoKey, saldo);
 
-    const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    const contacts = JSON.parse(localStorage.getItem(userContactsKey)) || [];
     const contact = contacts[selectedIndex];
 
-    const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    const transactions = JSON.parse(localStorage.getItem(userTransactionsKey)) || [];
     transactions.push({
       type: 'transfer',
       amount: monto,
@@ -206,7 +218,7 @@ $(document).ready(function () {
       description: `Transferencia a ${contact.name}`,
       sign: '-'
     });
-    localStorage.setItem('transactions', JSON.stringify(transactions));
+    localStorage.setItem(userTransactionsKey, JSON.stringify(transactions));
 
     $('#amountOverlay').addClass('d-none');
 
