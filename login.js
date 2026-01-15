@@ -36,6 +36,24 @@ $(document).ready(function () {
     if (user) {
       // Guardar usuario logueado en localStorage
       localStorage.setItem('currentUser', JSON.stringify(user));
+      
+      // Inicializar saldo y transacciones si no existen para este usuario
+      const userSaldoKey = `saldo_${email}`;
+      const userTransactionsKey = `transactions_${email}`;
+      
+      if (!localStorage.getItem(userSaldoKey)) {
+        localStorage.setItem(userSaldoKey, '60000');
+        const defaultTransactions = [
+          {
+            type: 'deposit',
+            amount: 60000,
+            date: new Date().toISOString(),
+            description: 'Depósito inicial',
+            sign: '+'
+          }
+        ];
+        localStorage.setItem(userTransactionsKey, JSON.stringify(defaultTransactions));
+      }
 
       $('#message').html(`
         <div class="alert alert-success text-center">
@@ -117,6 +135,40 @@ $(document).ready(function () {
 
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
+
+    // Inicializar saldo y transacciones para el nuevo usuario
+    const userSaldoKey = `saldo_${registerEmail}`;
+    const userTransactionsKey = `transactions_${registerEmail}`;
+    const userContactsKey = `contacts_${registerEmail}`;
+    
+    localStorage.setItem(userSaldoKey, '60000');
+    const defaultTransactions = [
+      {
+        type: 'deposit',
+        amount: 60000,
+        date: new Date().toISOString(),
+        description: 'Depósito inicial',
+        sign: '+'
+      }
+    ];
+    localStorage.setItem(userTransactionsKey, JSON.stringify(defaultTransactions));
+    
+    // Inicializar contactos por defecto para el nuevo usuario
+    const defaultContacts = [
+      {
+        name: 'Juan Pérez',
+        alias: 'juanperez',
+        cbu: '0000003100060386521879',
+        bank: 'Banco Nación'
+      },
+      {
+        name: 'María García',
+        alias: 'mariagarcia',
+        cbu: '0000003100060386521880',
+        bank: 'BBVA'
+      }
+    ];
+    localStorage.setItem(userContactsKey, JSON.stringify(defaultContacts));
 
     // Mostrar mensaje de éxito
     $('#registerMessage').html(`
